@@ -4,28 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/index.css">
-    <title>E-learning</title>
+    <title>Student login</title>
 </head>
 
 <body>
-    <div class="iframe-container">
-        <iframe width="100%" src="https://www.youtube.com/embed/f02mOEt11OQ?autoplay=1&controls=1&mute=1"
-            title="YouTube video player" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
-    </div>
-    <div class="e-login-btns">
-        <h4 class="text-center text-white">Login as</h4>
-        <div class="btn-group btn-group-lg" role="group" aria-label="Login options">
-            <a class="btn btn-primary" href="login-student.php">Student</a>
-            <a class="btn btn-primary" href="login-teacher.php">Teacher</a>
-        </div>
-    </div>
     <footer class="p-4 bg-dark text-white">
         <em>KEA Web Development 1st semester final project for Databases module. June 2021. Group B.</em>
     </footer>
