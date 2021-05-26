@@ -1,3 +1,9 @@
+<?php
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -125,7 +131,7 @@
                           <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                             <div class="modal-content">
                               <div class="modal-header">
-                                <h5 class="modal-title">Quiz of topic 1</h5>
+                                <h5 class="modal-title">Quiz of topic 2</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body form">
@@ -207,7 +213,7 @@
                         </div>
 
                         <div class="card mb-4">
-                          <h1 class="card-title pt-5 ps-5">Topic 1: Topic title</h1>
+                          <h1 class="card-title pt-5 ps-5">Topic 2: Topic title</h1>
                           <h5 class="card-subtitle pb-4 ps-5">Learning objectives go here</h5>
                           <img class="img-fluid" src="https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png" alt="">
                           <div class="card-body p-5">
@@ -240,10 +246,12 @@
                                 Resources
                             </div>
                             <div class="card-body">
-                              <form action="" method="POST">
+                            <form action="" method="POST">
                                 <div class="mb-2">
+                                  <h4>Post a resource</h4>
                                   <label for="resource_text">Got a resource worth sharing? Sharing is caring, post it in the box below!</label>
                                   <textarea class="form-control" id="resource_text" rows="3"></textarea>
+                                  <input class="form-control mt-2" type="url" name="resource_link" id="resource_link" placeholder="Paste a link to the resource here">
                                 </div>
                                 <button type="button" class="btn btn-primary mb-5">Share</button>
                               </form>

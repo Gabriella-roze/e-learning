@@ -1,11 +1,49 @@
 <?php
 // Connect to db
 require_once(__DIR__.'/db/db.php');
+
+// Get user resources from db
+try {
+  $all_love_recieved = 0;
+  $q = $db->prepare('SELECT * FROM exam.resources WHERE user_id=1 ORDER BY votes DESC;');
+    $q->execute();
+    $user_resources = $q->fetchAll();
+
+    foreach($user_resources  as $resource){
+      $all_love_recieved += $resource['votes'];
+      }
+
+  } catch(PDOException $ex) {
+  echo $ex->getMessage();
+  exit();
+  }
+
+// Get the resource that has most votes
+  // try {
+  //   $all_love_recieved = 0;
+  //   $q = $db->prepare('SELECT * FROM exam.resources ORDER BY votes DESC LIMIT 1;');
+  //     $q->execute();
+  //     $best_resource = $q->fetchAll()[0];
+
+  //     print_r($best_resource);
+  
+  //   } catch(PDOException $ex) {
+  //   echo $ex->getMessage();
+  //   exit();
+  //   }
+
+
 // Get topics from db
 try {
 $q = $db->prepare('SELECT * FROM exam.topic;');
   $q->execute();
   $topics = $q->fetchAll();
+// print_r($topics);
+
+  foreach($topics  as $topic){
+    // $topic['votes'];
+    }
+
 } catch(PDOException $ex) {
 echo $ex->getMessage();
 exit();
@@ -21,24 +59,17 @@ try {
   exit();
   }
 
-// Get user resources from db
-try {
-  $all_love_recieved = 0;
-  $q = $db->prepare('SELECT * FROM exam.resources WHERE user_id=1 ORDER BY votes DESC');
-    $q->execute();
-    $user_resources = $q->fetchAll();
-    print_r($user_resources);
+  try {
+  // Get best resource (resources are sorted by votes in db)
+  $q = $db->prepare('SELECT * FROM exam.resources_view LIMIT 1;');
+  $q->execute();
+  $best_resource = $q->fetchAll()[0];
+  print_r($best_resources);
 
-    foreach($user_resources  as $resource){
-      $all_love_recieved += $resource['votes'];
-      }
-
-  } catch(PDOException $ex) {
-  echo $ex->getMessage();
-  exit();
-  }
-
-
+} catch(PDOException $ex) {
+echo $ex->getMessage();
+exit();
+}
 
 ?>
 
@@ -94,7 +125,7 @@ try {
                                 Dashboard
                             </a>
                             <div class="sb-sidenav-menu-heading">Topics</div>
-                            <a class="nav-link" href="topic1.html">
+                            <a class="nav-link" href="topic1.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Topic 1
                             </a>
@@ -266,7 +297,7 @@ try {
                                 <img src="https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png" class="card-img-top" alt="...">
                                 <div class="card-body">
                                   <h5 class="card-title">Topic 1: Title of the topic</h5>
-                                  <a href="topic1.html" class="btn btn-primary btn-sm">Visit topic</a>
+                                  <a href="topic1.php" class="btn btn-primary btn-sm">Visit topic</a>
                                 </div>
                               </div>
                               <div class="col-3 card text-center" >
@@ -290,22 +321,19 @@ try {
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-grin-hearts me-1"></i>
-                            The Most Loved Resource of Today
+                            The Most Loved Resource
                         </div>
                         <div class="card-body row justify-content-evenly">
                             <div class="card">
                                 <div class="card-body">
-                                    <h2 class="text-success">28 <i class="fas fa-grin-hearts me-1"></i></h2>
-                                  <h5 class="card-title">Name Namerson</h5>
-                                  <h6 class="card-subtitle mb-2 text-muted">Topic 1: Title of the topic</h6>
-                                  <p class="card-text">Full Resource text in here. Some other text that is going to be here. Maybe some link like this: <span><a class="text-success" target="_blank" href="http://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png">download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png</a></span></p>
-                                  <a href="topic1.html" class="btn btn-primary btn-sm">Visit topic</a>
+                                    <h2 class="text-success"><?= $best_resource['votes']?> <i class="fas fa-grin-hearts me-1"></i></h2>
+                                  <h5 class="card-title"><?= $best_resource['user_name']?> <?= $best_resource['user_last_name']?></h5>
+                                  <h6 class="card-subtitle mb-2 text-muted"><?= $best_resource['topic_name']?></h6>
+                                  <p class="card-text mb-0"><?= $best_resource['body']?></p>
+                                  <a class="btn btn-link text-start m-0 p-0 mb-3" href="<?= $best_resource['link']?>"><?= $best_resource['link']?></a>
+                                  <a href="<?= "topic{$best_resource['topic_id']}.php"?>" class="btn btn-primary btn-sm">Visit topic</a>
                                 </div>
                               </div>
-                            
-        
-              
-                       
                     </div>
                 </div>
 
@@ -327,7 +355,7 @@ try {
                                       <span class="badge rounded-pill bg-info mb-2">Quiz completed</span>
                                       <p class="card-text">Short description here</p>
                                       <p class="card-text"><small class="text-muted">Last resource uploaded: 3 mins ago</small></p>
-                                      <a href="topic1.html" class="btn btn-primary">Go to topic</a>
+                                      <a href="topic1.php" class="btn btn-primary">Go to topic</a>
                                     </div>
                                   </div>
                                 </div>
