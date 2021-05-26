@@ -1,3 +1,48 @@
+<?php
+// Connect to db
+require_once(__DIR__.'/db/db.php');
+// Get topics from db
+try {
+$q = $db->prepare('SELECT * FROM exam.topic;');
+  $q->execute();
+  $topics = $q->fetchAll();
+} catch(PDOException $ex) {
+echo $ex->getMessage();
+exit();
+}
+
+// Get user passed quizzes from db
+try {
+  $q = $db->prepare('SELECT count(*) FROM exam.user_topic_log WHERE user_id=1 AND quiz_passed=true;');
+    $q->execute();
+    $passed_topics_count = $q->fetchAll();
+  } catch(PDOException $ex) {
+  echo $ex->getMessage();
+  exit();
+  }
+
+// Get user resources from db
+try {
+  $all_love_recieved = 0;
+  $q = $db->prepare('SELECT * FROM exam.resources WHERE user_id=1 ORDER BY votes DESC');
+    $q->execute();
+    $user_resources = $q->fetchAll();
+    print_r($user_resources);
+
+    foreach($user_resources  as $resource){
+      $all_love_recieved += $resource['votes'];
+      }
+
+  } catch(PDOException $ex) {
+  echo $ex->getMessage();
+  exit();
+  }
+
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -124,7 +169,7 @@
                                                   <div class="row">
                                                     <div class="col">
                                                       <h5 class="card-title text-uppercase text-muted mb-0">Available Topics</h5>
-                                                      <span class="h2 font-weight-bold mb-0">6</span>
+                                                      <span class="h2 font-weight-bold mb-0"><?= count($topics)?></span>
                                                     </div>
                                                     <div class="col-auto">
                                                       <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -145,7 +190,7 @@
                                                   <div class="row">
                                                     <div class="col">
                                                       <h5 class="card-title text-uppercase text-muted mb-0">Completed Topics</h5>
-                                                      <span class="h2 font-weight-bold mb-0">4</span>
+                                                      <span class="h2 font-weight-bold mb-0"><?= $passed_topics_count[0]['count']?></span>
                                                     </div>
                                                     <div class="col-auto">
                                                       <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
@@ -166,7 +211,7 @@
                                                   <div class="row">
                                                     <div class="col">
                                                       <h5 class="card-title text-uppercase text-muted mb-0">Resources uploaded</h5>
-                                                      <span class="h2 font-weight-bold mb-0">27</span>
+                                                      <span class="h2 font-weight-bold mb-0"><?= count($user_resources) ?></span>
                                                     </div>
                                                     <div class="col-auto">
                                                       <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
@@ -175,7 +220,7 @@
                                                     </div>
                                                   </div>
                                                   <p class="mt-3 mb-0 text-muted text-sm">
-                                                    <span class="text-warning mr-2"><i class="fas fa-arrow-up"></i> 1.10%</span>
+                                                    <span class="text-warning mr-2"><i class="fas fa-arrow-up"></i> 100%</span>
                                                     <span class="text-nowrap">Since last month</span>
                                                   </p>
                                                 </div>
@@ -186,12 +231,12 @@
                                                 <div class="card-body">
                                                   <div class="row">
                                                     <div class="col">
-                                                      <h5 class="card-title text-uppercase text-muted mb-0">Resources upvoted</h5>
-                                                      <span class="h2 font-weight-bold mb-0">49,5%</span>
+                                                      <h5 class="card-title text-uppercase text-muted mb-0">Your resources loved</h5>
+                                                      <span class="h2 font-weight-bold mb-0"><?= $all_love_recieved?></span>
                                                     </div>
                                                     <div class="col-auto">
                                                       <div class="icon icon-shape bg-info text-white rounded-circle shadow">
-                                                        <i class="fas fa-percent"></i>
+                                                        <i class="fas fa-grin-hearts"></i>
                                                       </div>
                                                     </div>
                                                   </div>
@@ -214,7 +259,7 @@
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-pepper-hot me-1"></i>
-                                The Hottest Topics of Today
+                                The Hottest Topics this month
                             </div>
                             <div class="card-body row justify-content-evenly">
                               <div class="col-3 card text-center">
