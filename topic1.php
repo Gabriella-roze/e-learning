@@ -22,7 +22,7 @@
   exit();
   }
 
-  // Get resource (resources are sorted by votes in db)
+  // Get the most loved resource (resources are sorted by votes in db)
   try {
     $q = $db->prepare('SELECT * FROM exam.resources_view WHERE topic_id = 1 ORDER BY creation_date::DATE DESC');
     $q->execute();

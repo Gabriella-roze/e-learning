@@ -108,7 +108,7 @@ BEGIN
 END;
 $$;
 
--- Insert new resource in the db
+-- Stored procedure - insert new resource in the db
 CREATE OR REPLACE PROCEDURE exam.post_resources(
 	_user_id integer, 
 	_topic_id integer, 
