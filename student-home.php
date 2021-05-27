@@ -81,6 +81,16 @@ echo $ex->getMessage();
 exit();
 }
 
+  // Get user topic log
+  try {
+    $q = $db->prepare('SELECT * FROM exam.user_log_view WHERE user_id = 1 ORDER BY topic_id ASC');
+    $q->execute();
+    $topics_log = $q->fetchAll();
+  } catch(PDOException $ex) {
+  echo $ex->getMessage();
+  exit();
+  }
+
 
 
 
@@ -361,6 +371,48 @@ exit();
                             </div>
                             <div class="card-body">
                               <!-- HERE -->
+
+                              <?php
+                             
+                                foreach($topics_log as $topic ){
+                                    ?>
+                                    <div class="card mb-3" >
+                                      <div class="row col-auto g-0">
+                                        <div class="col-md-4" style="background: url(https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png)  no-repeat center center / cover;">
+                                        </div>
+                                        <div class="col-md-8">
+                                          <div class="card-body">
+                                            <h4 class="card-title"><?=$topic['name']?></h4>
+                                            <?php
+                                            if ($topic['quiz_passed']){
+                                              ?>
+
+                                              <div class="mb-3">
+                                                <span class="badge rounded-pill bg-info mb-2">Quiz completed</span>
+                                              </div>
+
+                                              <?php
+                                            }
+
+                                            
+                                            ?>
+
+                                            <a href="topic<?=$topic['topic_id']?>.php" class="btn btn-primary btn-sm">Go to topic</a>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+
+
+                                    <?php
+                                 
+                                }
+                            ?>
+
+
+<!-- 
+                              
                               <div class="card mb-3" >
                                 <div class="row col-auto g-0">
                                   <div class="col-md-4" style="background: url(https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png)  no-repeat center center / cover;">
@@ -447,7 +499,7 @@ exit();
                                     </div>
                                   </div>
                                 </div>
-                              </div>
+                              </div> -->
                         </div>
                     </div>
                 </main>

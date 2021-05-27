@@ -16,12 +16,15 @@ FROM exam.resources JOIN exam.topic ON resources.topic_id = topic.topic_id
 JOIN exam.user ON resources.user_id = "user".user_id
 ORDER BY resources.votes DESC;
 
--- Creating a view for all topics and user topic log related data
+-- Creating a view for all topics and user topic log related data (updated)
 CREATE VIEW exam.user_log_view AS
 SELECT 
-	topic.topic_id, topic.name, topic.body, user_topic_log.user_id,
+	"user".user_id,
+	topic.topic_id, topic.name, topic.body,
 	user_topic_log.seen AS topic_seen, user_topic_log.quiz_passed
-FROM exam.topic FULL JOIN exam.user_topic_log ON topic.topic_id = user_topic_log.topic_id;	
+FROM 
+	exam.topic FULL JOIN exam.user_topic_log ON topic.topic_id = user_topic_log.topic_id
+	FULL JOIN exam.user ON "user".user_id = user_topic_log.user_id;	
 
 -- Creating topics view including media, src and metadata
 CREATE VIEW exam.topic_view AS
