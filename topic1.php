@@ -1,6 +1,7 @@
 <?php
   // Connect to db
   require_once(__DIR__.'/db/db.php');
+
   // Get quizz data
   try {
     $q = $db->prepare('SELECT * FROM exam.quiz(3,1)');
@@ -14,8 +15,8 @@
   // Get topic from db
   try {
     $q = $db->prepare('SELECT * FROM exam.topic_view WHERE topic_id = 1');
-      $q->execute();
-      $topic = $q->fetchAll()[0];    
+    $q->execute();
+    $topic = $q->fetchAll()[0];  
   } catch(PDOException $ex) {
   echo $ex->getMessage();
   exit();
@@ -23,15 +24,37 @@
 
   // Get resource (resources are sorted by votes in db)
   try {
-    $q = $db->prepare('SELECT * FROM exam.resources_view WHERE topic_id = 2 ORDER BY creation_date::DATE DESC');
+    $q = $db->prepare('SELECT * FROM exam.resources_view WHERE topic_id = 1 ORDER BY creation_date::DATE DESC');
     $q->execute();
     $topic_resource = $q->fetchAll();
   } catch(PDOException $ex) {
   echo $ex->getMessage();
   exit();
   }
-?>
 
+// Get quizz data
+// $key = 'Topic1';
+// try {
+//     $redis = new Redis();
+//     $redis->connect('127.0.0.1', 6379);
+
+//     if (!$redis->get($key)) {
+//       $q = $db->prepare('SELECT * FROM exam.quiz(3,1)');
+//       $q->execute();
+//       $quiz = $q->fetchAll();
+//         $redis->set($key, serialize($quiz));
+//         $redis->expire($key, 10);
+//         // $source = 'Postgresql Server';
+//     } else {
+//         //  $source = 'Redis Server';
+//          $quiz = unserialize($redis->get($key));
+//     }
+//     // echo $source . ': <br>';
+    
+// } catch (Exception $ex) {
+//     echo $ex->getMessage();
+// }
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -79,7 +102,7 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Main</div>
-                            <a class="nav-link" href="student-home.html">
+                            <a class="nav-link" href="student-home.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
@@ -164,8 +187,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body form">
-                                <?php foreach($quiz  as $question){
-                                $all_love_recieved += $resource['votes'];
+                                <?php foreach($quiz as $question){
                                 ?>
                                 <div class="m-3">
                                 <h6><?=$question['question_text']?></h6>
