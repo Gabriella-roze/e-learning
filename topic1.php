@@ -272,6 +272,7 @@
                                       <img style="height: 50px; width: 50px; border-radius: 25px;" src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="USer image">
                                     </div>
                                     <div class="col-11">
+                                      <h4><?= $single_resource['user_name']?> <?=$single_resource['user_last_name']?></h4>
                                       <p class="text-muted mb-0"><?= substr($single_resource['creation_date'], 0, 16) ?></p>
                                       <p class="mb-0"><?= $single_resource['body']?></p>
                                       <a class="btn btn-link m-0 p-0 text-start" target="_blank" href="<?= $single_resource['link']?>"><?= $single_resource['link']?></a>
