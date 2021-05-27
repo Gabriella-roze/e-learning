@@ -1,15 +1,35 @@
 <?php
-// Connect to db
-require_once(__DIR__.'/db/db.php');
-// Get quizz data
-try {
-  $q = $db->prepare('SELECT * FROM exam.quiz(3,1)');
-  $q->execute();
-  $quiz = $q->fetchAll();
-} catch(PDOException $ex) {
-echo $ex->getMessage();
-exit();
-}
+  // Connect to db
+  require_once(__DIR__.'/db/db.php');
+  // Get quizz data
+  try {
+    $q = $db->prepare('SELECT * FROM exam.quiz(3,1)');
+    $q->execute();
+    $quiz = $q->fetchAll();
+  } catch(PDOException $ex) {
+  echo $ex->getMessage();
+  exit();
+  }
+
+  // Get topic from db
+  try {
+    $q = $db->prepare('SELECT * FROM exam.topic_view WHERE topic_id = 1');
+      $q->execute();
+      $topic = $q->fetchAll()[0];    
+  } catch(PDOException $ex) {
+  echo $ex->getMessage();
+  exit();
+  }
+
+  // Get resource (resources are sorted by votes in db)
+  try {
+    $q = $db->prepare('SELECT * FROM exam.resources_view WHERE topic_id = 2 ORDER BY creation_date::DATE DESC');
+    $q->execute();
+    $topic_resource = $q->fetchAll();
+  } catch(PDOException $ex) {
+  echo $ex->getMessage();
+  exit();
+  }
 ?>
 
 
@@ -182,21 +202,14 @@ exit();
                         </div>
 
                         <div class="card mb-4">
-                          <h1 class="card-title pt-5 ps-5">Topic 1: Topic title</h1>
-                          <h5 class="card-subtitle pb-4 ps-5">Last resource uloaded: </h5>
-                          <img class="img-fluid" src="https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png" alt="">
+                          <h1 class="card-title pt-5 ps-5"><?= $topic['name']?></h1>
+                          <h5 class="card-subtitle pb-4 ps-5">Last resource uloaded: <?= substr($topic_resource[0]['creation_date'], 0, 16) ?></h5>
+                          <img class="img-fluid" src="<?= $topic['src_desktop']?>" alt="">
                           <div class="card-body p-5">
-                            <h2>Heading here</h2>
-                            <p>Lorem ipsum dolor sit amet. Ut placerat orci nulla pellentesque dignissim enim sit. Urna condimentum mattis pellentesque id. Ut enim blandit volutpat maecenas. A cras semper auctor neque vitae. Sed libero enim sed faucibus turpis in eu. Lacus vestibulum sed arcu non odio euismod lacinia. Eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada. Tellus id interdum velit laoreet. Nunc aliquet bibendum enim facilisis gravida neque convallis a cras. In iaculis nunc sed augue lacus viverra vitae congue eu. Proin sed libero enim sed faucibus turpis in eu mi. Ipsum dolor sit amet consectetur adipiscing elit. Diam donec adipiscing tristique risus nec feugiat in fermentum posuere. Nam aliquam sem et tortor consequat id porta nibh. Arcu odio ut sem nulla pharetra diam sit amet. Vitae congue eu consequat ac felis donec et odio. Sem nulla pharetra diam sit amet.</p>
-                            <h2>Another heading here</h2>
-                            <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut placerat orci nulla pellentesque dignissim enim sit. Urna condimentum mattis pellentesque id. Ut enim blandit volutpat maecenas. A cras semper auctor neque vitae. Sed libero enim sed faucibus turpis in eu. Lacus vestibulum sed arcu non odio euismod lacinia. Eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada. Tellus id interdum velit laoreet. Nunc aliquet bibendum enim facilisis gravida neque convallis a cras. In iaculis nunc sed augue lacus viverra vitae congue eu. Proin sed libero enim sed faucibus turpis in eu mi. Ipsum dolor sit amet consectetur adipiscing elit. Diam donec adipiscing tristique risus nec feugiat in fermentum posuere. Nam aliquam sem et tortor consequat id porta nibh. Sed vulputate mi sit amet mauris commodo quis imperdiet. In vitae turpis massa sed elementum. Arcu odio ut sem nulla pharetra diam sit amet. Vitae congue eu consequat ac felis donec et odio. Sem nulla pharetra diam sit amet.</p>
-                            <h2>Last heading here</h2>
-                            <p>Ut placerat orci nullaemper auctor neque vitae. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nam aliquam sem et tortor consequat id porta nibh. Sed vulputate mi sit amet mauris commodo quis imperdiet. In vitae turpis massa sed elementum. Arcu odio ut sem nulla pharetra diam sit amet. Vitae congue eu consequat ac felis donec et odio. Sem nulla pharetra diam sit amet.</p>
-                            <h2>Summary</h2>
-                            <p>Nam aliquam sem et tortor consequat id porta nibh. Sed vulputate mi sit amet mauris commodo quis imperdiet. In vitae turpis massa sed elementum. Arcu odio ut sem nulla pharetra diam sit amet. Vitae congue eu consequat ac felis donec et odio. Sem nulla pharetra diam sit amet.</p>
+                            <p><?= $topic['body']?></p>
                           </div>
                          
-                                                    <!-- TRIGGER QUIZ MODAL 1 -->
+                        <!-- TRIGGER QUIZ MODAL 1 -->
                         <div class="card-footer d-flex align-items-center justify-content-center">
                           <p class="mb-0 me-3 text-warning">
                             You have not completed a quiz of this topic: 
@@ -225,45 +238,31 @@ exit();
                                 <button type="button" class="btn btn-primary mb-5">Share</button>
                               </form>
 
-                                <div class="card mb-4">
+                              <?php foreach($topic_resource as $single_resource){
+                                // $single_resource
+                                ?>
+                                    <div class="card mb-4">
                                   <div class="card-header text-success">
-                                    50 <i class="fas fa-grin-hearts me-1"></i>
+                                    <?= $single_resource['votes']?> <i class="fas fa-grin-hearts me-1"></i>
                                   </div>
                                   <div class="card-body row">                                   
                                     <div class="col-1">
                                       <img style="height: 50px; width: 50px; border-radius: 25px;" src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="USer image">
                                     </div>
                                     <div class="col-11">
-                                      <p class="text-muted mb-0">Date</p>
-                                      <p class="mb-0">Comment</p>
-                                      <a class="btn btn-link m-0 p-0" href="">Resource link here</a>
+                                      <p class="text-muted mb-0"><?= substr($single_resource['creation_date'], 0, 16) ?></p>
+                                      <p class="mb-0"><?= $single_resource['body']?></p>
+                                      <a class="btn btn-link m-0 p-0 text-start" target="_blank" href="<?= $single_resource['link']?>"><?= $single_resource['link']?></a>
                                     </div>
                                   </div>
                                   <div class="card-footer">
                                     <button class="btn btn-sm btn-outline-warning text-center"><i class="fas fa-grin-hearts"></i></button>
-                                    <button class="btn btn-sm btn-outline-primary text-center disabled">Reply</button>
+                                    <button class=" btn btn-sm btn-outline-primary text-center disabled">Reply</button>
                                   </div>
                                 </div>
-
-                                <div class="card mb-4">
-                                  <div class="card-header text-success">
-                                    50 <i class="fas fa-grin-hearts me-1"></i>
-                                  </div>
-                                  <div class="card-body row">                                   
-                                    <div class="col-1">
-                                      <img style="height: 50px; width: 50px; border-radius: 25px;" src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="USer image">
-                                    </div>
-                                    <div class="col-11">
-                                      <p class="text-muted mb-0">Date</p>
-                                      <p class="mb-0">Comment</p>
-                                      <a class="btn btn-link m-0 p-0" href="">Resource link here</a>
-                                    </div>
-                                  </div>
-                                  <div class="card-footer">
-                                    <button class="btn btn-sm btn-outline-warning text-center"><i class="fas fa-grin-hearts"></i></button>
-                                    <button class="btn btn-sm btn-outline-primary text-center disabled">Reply</button>
-                                  </div>
-                                </div>
+                           
+                                <?php
+                            } ?>
                             </div>
                     </div>
                 </main>
@@ -273,6 +272,7 @@ exit();
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
+ 
+
     </body>
 </html>

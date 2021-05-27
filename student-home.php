@@ -59,8 +59,8 @@ try {
   exit();
   }
 
-  try {
   // Get best resource (resources are sorted by votes in db)
+  try {
   $q = $db->prepare('SELECT * FROM exam.resources_view LIMIT 1;');
   $q->execute();
   $best_resource = $q->fetchAll()[0];
