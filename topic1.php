@@ -2,16 +2,28 @@
 // Connect to db
 require_once(__DIR__.'/db/db.php');
 // Get quizz data
+$key = 'Topic1';
 try {
-  $q = $db->prepare('SELECT * FROM exam.quiz(3,1)');
-  $q->execute();
-  $quiz = $q->fetchAll();
-} catch(PDOException $ex) {
-echo $ex->getMessage();
-exit();
+    $redis = new Redis();
+    $redis->connect('127.0.0.1', 6379);
+
+    if (!$redis->get($key)) {
+      $q = $db->prepare('SELECT * FROM exam.quiz(3,1)');
+      $q->execute();
+      $quiz = $q->fetchAll();
+        $redis->set($key, serialize($quiz));
+        $redis->expire($key, 10);
+        // $source = 'Postgresql Server';
+    } else {
+        //  $source = 'Redis Server';
+         $quiz = unserialize($redis->get($key));
+    }
+    // echo $source . ': <br>';
+    
+} catch (Exception $ex) {
+    echo $ex->getMessage();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -144,8 +156,7 @@ exit();
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body form">
-                                <?php foreach($quiz  as $question){
-                                $all_love_recieved += $resource['votes'];
+                                <?php foreach($quiz as $question){
                                 ?>
                                 <div class="m-3">
                                 <h6><?=$question['question_text']?></h6>
