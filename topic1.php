@@ -1,5 +1,15 @@
 <?php
-
+// Connect to db
+require_once(__DIR__.'/db/db.php');
+// Get quizz data
+try {
+  $q = $db->prepare('SELECT * FROM exam.quiz(3,1)');
+  $q->execute();
+  $quiz = $q->fetchAll();
+} catch(PDOException $ex) {
+echo $ex->getMessage();
+exit();
+}
 ?>
 
 
@@ -134,74 +144,34 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body form">
+                                <?php foreach($quiz  as $question){
+                                $all_love_recieved += $resource['votes'];
+                                ?>
                                 <div class="m-3">
-                                <h6>1. Question 1</h6>
+                                <h6><?=$question['question_text']?></h6>
                                 <div class=" mb-3">
                                   <div class="form-check">
                                     <input class="form-check-input" type="radio" name="question1">
                                     <label class="form-check-label" for="question1">
-                                      Answer 1
+                                    <?=$question['option_one']?>
                                     </label>
                                   </div>
                                   <div class="form-check">
                                     <input class="form-check-input" type="radio" name="question1" >
                                     <label class="form-check-label" for="question1">
-                                      Answer 2
+                                    <?=$question['option_two']?>
                                     </label>
                                   </div>
                                   <div class="form-check mb-3">
                                     <input class="form-check-input" type="radio" name="question1" >
                                     <label class="form-check-label" for="question1">
-                                      Answer 3
+                                    <?=$question['option_three']?>
                                     </label>
                                   </div>
                                 </div>
                               </div>
-
-                                <div class="m-3">
-                                <h6>2. Question 2</h6>
-                                <div class="form-check">
-                                  <input class="form-check-input" type="radio" name="question2">
-                                  <label class="form-check-label" for="question2">
-                                    Answer 1
-                                  </label>
-                                </div>
-                                <div class="form-check">
-                                  <input class="form-check-input" type="radio" name="question2" >
-                                  <label class="form-check-label" for="question2">
-                                    Answer 2
-                                  </label>
-                                </div>
-                                <div class="form-check mb-3">
-                                  <input class="form-check-input" type="radio" name="question2" >
-                                  <label class="form-check-label" for="question2">
-                                    Answer 3
-                                  </label>
-                                </div>
-                              </div>
-
-                                <div class="m-3">
-                                  <h6>3. Question 3</h6>
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="question3">
-                                    <label class="form-check-label" for="question3">
-                                      Answer 1
-                                    </label>
-                                  </div>
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="question3" >
-                                    <label class="form-check-label" for="question3">
-                                      Answer 2
-                                    </label>
-                                  </div>
-                                  <div class="form-check mb-3">
-                                    <input class="form-check-input" type="radio" name="question3" >
-                                    <label class="form-check-label" for="question3">
-                                      Answer 3
-                                    </label>
-                                  </div>
-                                </div>
-
+                              <?php
+                            } ?>
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>

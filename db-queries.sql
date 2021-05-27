@@ -36,3 +36,6 @@ ORDER BY random()
 LIMIT _max;
 end;
 $$ language plpgsql;
+
+-- Call function exam.quiz()
+SELECT * FROM exam.quiz (3, 1)
