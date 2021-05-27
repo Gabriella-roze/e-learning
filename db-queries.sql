@@ -60,3 +60,64 @@ $$ language plpgsql;
 
 -- Call function exam.quiz()
 SELECT * FROM exam.quiz (3, 1)
+
+-- Stored procedure that didn't work
+CREATE OR REPLACE PROCEDURE exam.add_user_log (
+_user_id int,
+_topic_id int,
+_quiz_passed boolean)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+did_insert boolean := false;
+exists_id boolean;
+BEGIN
+SELECT EXISTS(SELECT 1 FROM exam.user_topic_log WHERE  user_id=_user_id AND topic_id=_topic_id) INTO exists_id;
+
+IF exists_id IS FALSE THEN
+INSERT INTO exam.user_topic_log (user_id, topic_id, seen, quiz_passed) VALUES (_user_id, _topic_id, true, _quiz_passed)
+RETURNING exists_id = true;
+
+ELSE 
+UPDATE exam.user_topic_log
+SET seen = true,
+    quiz_passed = _quiz_passed
+WHERE user_id = _user_id AND topic_id = _topic_id;
+END if;
+
+END;
+$$;
+
+-- Stored procedure that works
+CREATE OR REPLACE PROCEDURE exam.add_user_log (
+_user_id int,
+_topic_id int,
+_quiz_passed boolean)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+   IF EXISTS(SELECT 1 FROM exam.user_topic_log WHERE user_id=_user_id AND topic_id=_topic_id) 
+      THEN
+      UPDATE exam.user_topic_log
+      SET seen = true,
+      quiz_passed = _quiz_passed
+      WHERE user_id = _user_id AND topic_id = _topic_id;
+   ELSE 
+   INSERT INTO exam.user_topic_log(user_id, topic_id, seen, quiz_passed) VALUES(_user_id, _topic_id, true, _quiz_passed);
+   END if;
+END;
+$$;
+
+-- Insert new resource in the db
+CREATE OR REPLACE PROCEDURE exam.post_resources(
+	_user_id integer, 
+	_topic_id integer, 
+	_creation_date TIMESTAMP,
+	_resources_text text, 
+	_link text)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+INSERT INTO exam.resources(resource_id, user_id, topic_id, creation_date, resources_text, votes, link) VALUES (DEFAULT, _user_id, _topic_id, _creation_date, _resources_text, 1, _link);
+END;
+$$;
