@@ -38,11 +38,7 @@ try {
 $q = $db->prepare('SELECT * FROM exam.topic;');
   $q->execute();
   $topics = $q->fetchAll();
-// print_r($topics);
-
-  foreach($topics  as $topic){
-    // $topic['votes'];
-    }
+  // print_r($topics);
 
 } catch(PDOException $ex) {
 echo $ex->getMessage();
@@ -70,6 +66,23 @@ try {
 echo $ex->getMessage();
 exit();
 }
+
+// Get top 3 topics ids and get those topics
+try {
+  $q = $db->prepare('SELECT COUNT(resource_id) AS resources, topic_id 
+  FROM exam.resources
+  GROUP BY topic_id
+  ORDER BY resources DESC LIMIT 3');
+  $q->execute();
+  $top_topics_ids = $q->fetchAll();
+
+} catch(PDOException $ex) {
+echo $ex->getMessage();
+exit();
+}
+
+
+
 
 ?>
 
@@ -290,30 +303,33 @@ exit();
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-pepper-hot me-1"></i>
-                                The Hottest Topics this month
+                                Top 3 most hot topics
                             </div>
+
                             <div class="card-body row justify-content-evenly">
-                              <div class="col-3 card text-center">
-                                <img src="https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                  <h5 class="card-title">Topic 1: Title of the topic</h5>
-                                  <a href="topic1.php" class="btn btn-primary btn-sm">Visit topic</a>
-                                </div>
-                              </div>
-                              <div class="col-3 card text-center" >
-                                <img src="https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                  <h5 class="card-title">Topic 3: Title of the topic</h5>
-                                  <a href="topic3.html" class="btn btn-primary btn-sm">Visit topic</a>
-                                </div>
-                              </div>
-                              <div class="col-3 card text-center" >
-                                <img src="https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                  <h5 class="card-title">Topic 4: Title of the topic</h5>
-                                  <a href="topic4.html" class="btn btn-primary btn-sm">Visit topic</a>
-                                </div>
-                              </div>
+
+                            <?php
+                              foreach($top_topics_ids as $id){
+                                foreach($topics as $topic ){
+                                  if ($topic['topic_id'] == $id['topic_id']) {
+                                    ?>
+
+                                      <div class="col-3 card text-center" >
+                                      <img src="https://guides.wp-bullet.com/wp-content/uploads/2018/12/export-large-mysql-database-tables-wordpress.png" class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                          <h5 class="card-title"><?=$topic['name']?></h5>
+                                          <a href="topic<?=$topic['topic_id']?>.html" class="btn btn-primary btn-sm">Visit topic</a>
+                                        </div>
+                                      </div>
+
+                                    <?php
+                                  }
+                                }
+                              }
+
+                            ?>
+
+                    
                         </div>
                     </div>
 
