@@ -193,19 +193,19 @@
                                 <h6><?=$question['question_text']?></h6>
                                 <div class=" mb-3">
                                   <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="question1">
+                                    <input class="form-check-input" type="radio" name="question<?=$question['question_id']?>"> 
                                     <label class="form-check-label" for="question1">
                                     <?=$question['option_one']?>
                                     </label>
                                   </div>
                                   <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="question1" >
+                                    <input class="form-check-input" type="radio" name="question<?=$question['question_id']?>" >
                                     <label class="form-check-label" for="question1">
                                     <?=$question['option_two']?>
                                     </label>
                                   </div>
                                   <div class="form-check mb-3">
-                                    <input class="form-check-input" type="radio" name="question1" >
+                                    <input class="form-check-input" type="radio" name="question<?=$question['question_id']?>" >
                                     <label class="form-check-label" for="question1">
                                     <?=$question['option_three']?>
                                     </label>
