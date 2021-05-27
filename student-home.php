@@ -353,9 +353,8 @@ exit();
                                     <div class="card-body">
                                       <h4 class="card-title">Topic 1: Name of the topic</h4>
                                       <span class="badge rounded-pill bg-info mb-2">Quiz completed</span>
-                                      <p class="card-text">Short description here</p>
                                       <p class="card-text"><small class="text-muted">Last resource uploaded: 3 mins ago</small></p>
-                                      <a href="topic1.php" class="btn btn-primary">Go to topic</a>
+                                      <a href="topic1.php" class="btn btn-primary btn-sm">Go to topic</a>
                                     </div>
                                   </div>
                                 </div>
@@ -369,9 +368,8 @@ exit();
                                     <div class="card-body">
                                       <h4 class="card-title">Topic 2: Name of the topic</h4>
                                       <span class="badge rounded-pill bg-info mb-2">Quiz completed</span>
-                                      <p class="card-text">Short description here</p>
                                       <p class="card-text"><small class="text-muted">Last resource uploaded: 3 mins ago</small></p>
-                                      <a href="tolic2.html" class="btn btn-primary">Go to topic</a>
+                                      <a href="tolic2.html" class="btn btn-primary btn-sm">Go to topic</a>
                                     </div>
                                   </div>
                                 </div>
@@ -385,9 +383,8 @@ exit();
                                     <div class="card-body">
                                       <h4 class="card-title">Topic 3: Name of the topic</h4>
                                       <span class="badge rounded-pill bg-info mb-2">Quiz completed</span>
-                                      <p class="card-text">Short description here</p>
                                       <p class="card-text"><small class="text-muted">Last resource uploaded: 3 mins ago</small></p>
-                                      <a href="topic3.html" class="btn btn-primary">Go to topic</a>
+                                      <a href="topic3.html" class="btn btn-primary btn-sm">Go to topic</a>
                                     </div>
                                   </div>
                                 </div>
@@ -401,9 +398,8 @@ exit();
                                     <div class="card-body">
                                       <h4 class="card-title">Topic 4: Name of the topic</h4>
                                       <span class="badge rounded-pill bg-info mb-2">Quiz completed</span>
-                                      <p class="card-text">Short description here</p>
                                       <p class="card-text"><small class="text-muted">Last resource uploaded: 3 mins ago</small></p>
-                                      <a href="topic4.html" class="btn btn-primary">Go to topic</a>
+                                      <a href="topic4.html" class="btn btn-primary btn-sm">Go to topic</a>
                                     </div>
                                   </div>
                                 </div>
@@ -416,9 +412,8 @@ exit();
                                   <div class="col-md-8">
                                     <div class="card-body">
                                       <h4 class="card-title">Topic 5: Name of the topic</h4>
-                                      <p class="card-text">Short description here</p>
                                       <p class="card-text"><small class="text-muted">Last resource uploaded: 3 mins ago</small></p>
-                                      <a href="topic5.html" class="btn btn-primary">Go to topic</a>
+                                      <a href="topic5.html" class="btn btn-primary btn-sm">Go to topic</a>
                                     </div>
                                   </div>
                                 </div>
@@ -431,9 +426,8 @@ exit();
                                   <div class="col-md-8">
                                     <div class="card-body">
                                       <h4 class="card-title">Topic 6: Name of the topic</h4>
-                                      <p class="card-text">Short description here</p>
                                       <p class="card-text"><small class="text-muted">Last resource uploaded: 3 mins ago</small></p>
-                                      <a href="topic6.html" class="btn btn-primary">Go to topic</a>
+                                      <a href="topic6.html" class="btn btn-primary btn-sm">Go to topic</a>
                                     </div>
                                   </div>
                                 </div>

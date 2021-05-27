@@ -213,7 +213,7 @@
 
                         <div class="card mb-4">
                           <h1 class="card-title pt-5 ps-5">Topic 1: Topic title</h1>
-                          <h5 class="card-subtitle pb-4 ps-5">Learning objectives go here</h5>
+                          <h5 class="card-subtitle pb-4 ps-5">Last resource uloaded: </h5>
                           <img class="img-fluid" src="https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png" alt="">
                           <div class="card-body p-5">
                             <h2>Heading here</h2>
@@ -265,7 +265,8 @@
                                     </div>
                                     <div class="col-11">
                                       <p class="text-muted mb-0">Date</p>
-                                      <p>Comment</p>
+                                      <p class="mb-0">Comment</p>
+                                      <a class="btn btn-link m-0 p-0" href="">Resource link here</a>
                                     </div>
                                   </div>
                                   <div class="card-footer">
@@ -274,7 +275,7 @@
                                   </div>
                                 </div>
 
-                                <div class="card">
+                                <div class="card mb-4">
                                   <div class="card-header text-success">
                                     50 <i class="fas fa-grin-hearts me-1"></i>
                                   </div>
@@ -284,7 +285,8 @@
                                     </div>
                                     <div class="col-11">
                                       <p class="text-muted mb-0">Date</p>
-                                      <p>Comment</p>
+                                      <p class="mb-0">Comment</p>
+                                      <a class="btn btn-link m-0 p-0" href="">Resource link here</a>
                                     </div>
                                   </div>
                                   <div class="card-footer">
