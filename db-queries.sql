@@ -103,7 +103,8 @@ BEGIN
       quiz_passed = _quiz_passed
       WHERE user_id = _user_id AND topic_id = _topic_id;
    ELSE 
-   INSERT INTO exam.user_topic_log(user_id, topic_id, seen, quiz_passed) VALUES(_user_id, _topic_id, true, _quiz_passed);
+   INSERT INTO exam.user_topic_log(user_id, topic_id, seen, quiz_passed) 
+   VALUES(_user_id, _topic_id, true, _quiz_passed);
    END if;
 END;
 $$;
@@ -121,3 +122,27 @@ BEGIN
 INSERT INTO exam.resources(resource_id, user_id, topic_id, creation_date, resources_text, votes, link) VALUES (DEFAULT, _user_id, _topic_id, _creation_date, _resources_text, 1, _link);
 END;
 $$;
+
+-- Stored procedure - Insert old data into the log
+CREATE OR REPLACE FUNCTION exam.log_user() 
+RETURNS trigger
+AS $$
+DECLARE
+BEGIN
+  INSERT INTO exam.user_update_logs (user_id, old_first_name, old_last_name, old_email)
+  VALUES (OLD.user_id, OLD.first_name, OLD.last_name, OLD.email);
+  RAISE NOTICE 'User information has been updated #%', OLD.user_id;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger - log changes after a row is updates
+CREATE TRIGGER log_users
+AFTER UPDATE ON exam.user
+FOR EACH ROW EXECUTE PROCEDURE exam.log_user();
+
+-- Update a row
+UPDATE exam.user 
+SET first_name ='Iulia'
+WHERE user_id = 3;
+
