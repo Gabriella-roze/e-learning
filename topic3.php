@@ -1,8 +1,60 @@
 <?php
+  // Connect to db
+  require_once(__DIR__.'/db/db.php');
 
+  // Get quizz data
+  try {
+    $q = $db->prepare('SELECT * FROM exam.quiz(3,3)');
+    $q->execute();
+    $quiz = $q->fetchAll();
+  } catch(PDOException $ex) {
+  echo $ex->getMessage();
+  exit();
+  }
 
+  // Get topic from db
+  try {
+    $q = $db->prepare('SELECT * FROM exam.topic_view WHERE topic_id = 3');
+    $q->execute();
+    $topic = $q->fetchAll()[0];  
+  } catch(PDOException $ex) {
+  echo $ex->getMessage();
+  exit();
+  }
+
+  // Get the most loved resource (resources are sorted by votes in db)
+  try {
+    $q = $db->prepare('SELECT * FROM exam.resources_view WHERE topic_id = 3 ORDER BY creation_date::DATE DESC');
+    $q->execute();
+    $topic_resource = $q->fetchAll();
+  } catch(PDOException $ex) {
+  echo $ex->getMessage();
+  exit();
+  }
+
+// Get quizz data
+// $key = 'Topic1';
+// try {
+//     $redis = new Redis();
+//     $redis->connect('127.0.0.1', 6379);
+
+//     if (!$redis->get($key)) {
+//       $q = $db->prepare('SELECT * FROM exam.quiz(3,1)');
+//       $q->execute();
+//       $quiz = $q->fetchAll();
+//         $redis->set($key, serialize($quiz));
+//         $redis->expire($key, 10);
+//         // $source = 'Postgresql Server';
+//     } else {
+//         //  $source = 'Redis Server';
+//          $quiz = unserialize($redis->get($key));
+//     }
+//     // echo $source . ': <br>';
+    
+// } catch (Exception $ex) {
+//     echo $ex->getMessage();
+// }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +64,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>E-learning | Tables</title>
+        <title>E-learning | Topic</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/tables.css">
@@ -50,32 +102,32 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Main</div>
-                            <a class="nav-link" href="student-home.html">
+                            <a class="nav-link" href="student-home.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
                             <div class="sb-sidenav-menu-heading">Topics</div>
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="topic1.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Topic 1
                             </a>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="topic2.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Topic 2
                             </a>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="topic3.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Topic 3
                             </a>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="topic4.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Topic 4
                             </a>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="topic5.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Topic 5
                             </a>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="topic6.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Topic 6
                             </a>
@@ -116,7 +168,6 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <!-- <h1 class="mt-4">Topic 1</h1> -->
                         <!-- TRIGGER QUIZ MODAL 1 -->
                         <div class="d-flex justify-content-end align-items-center">
                           <p class="mb-0 me-3 text-warning">
@@ -131,78 +182,37 @@
                           <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                             <div class="modal-content">
                               <div class="modal-header">
-                                <h5 class="modal-title">Quiz of topic 2</h5>
+                                <h5 class="modal-title">Quiz of topic 1</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body form">
+                                <?php foreach($quiz as $question){
+                                ?>
                                 <div class="m-3">
-                                <h6>1. Question 1</h6>
+                                <h6><?=$question['question_text']?></h6>
                                 <div class=" mb-3">
                                   <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="question1">
+                                    <input class="form-check-input" type="radio" name="question<?=$question['question_id']?>"> 
                                     <label class="form-check-label" for="question1">
-                                      Answer 1
+                                    <?=$question['option_one']?>
                                     </label>
                                   </div>
                                   <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="question1" >
+                                    <input class="form-check-input" type="radio" name="question<?=$question['question_id']?>" >
                                     <label class="form-check-label" for="question1">
-                                      Answer 2
+                                    <?=$question['option_two']?>
                                     </label>
                                   </div>
                                   <div class="form-check mb-3">
-                                    <input class="form-check-input" type="radio" name="question1" >
+                                    <input class="form-check-input" type="radio" name="question<?=$question['question_id']?>" >
                                     <label class="form-check-label" for="question1">
-                                      Answer 3
+                                    <?=$question['option_three']?>
                                     </label>
                                   </div>
                                 </div>
                               </div>
-
-                                <div class="m-3">
-                                <h6>2. Question 2</h6>
-                                <div class="form-check">
-                                  <input class="form-check-input" type="radio" name="question2">
-                                  <label class="form-check-label" for="question2">
-                                    Answer 1
-                                  </label>
-                                </div>
-                                <div class="form-check">
-                                  <input class="form-check-input" type="radio" name="question2" >
-                                  <label class="form-check-label" for="question2">
-                                    Answer 2
-                                  </label>
-                                </div>
-                                <div class="form-check mb-3">
-                                  <input class="form-check-input" type="radio" name="question2" >
-                                  <label class="form-check-label" for="question2">
-                                    Answer 3
-                                  </label>
-                                </div>
-                              </div>
-
-                                <div class="m-3">
-                                  <h6>3. Question 3</h6>
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="question3">
-                                    <label class="form-check-label" for="question3">
-                                      Answer 1
-                                    </label>
-                                  </div>
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="question3" >
-                                    <label class="form-check-label" for="question3">
-                                      Answer 2
-                                    </label>
-                                  </div>
-                                  <div class="form-check mb-3">
-                                    <input class="form-check-input" type="radio" name="question3" >
-                                    <label class="form-check-label" for="question3">
-                                      Answer 3
-                                    </label>
-                                  </div>
-                                </div>
-
+                              <?php
+                            } ?>
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -211,32 +221,23 @@
                             </div>
                           </div>
                         </div>
-
                         <div class="card mb-4">
-                          <h1 class="card-title pt-5 ps-5">Topic 2: Topic title</h1>
-                          <h5 class="card-subtitle pb-4 ps-5">Learning objectives go here</h5>
-                          <img class="img-fluid" src="https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png" alt="">
+                          <h1 class="card-title pt-5 ps-5"><?= $topic['name']?></h1>
+                          <h5 class="card-subtitle pb-4 ps-5">Last resource uloaded: <?= substr($topic_resource[0]['creation_date'], 0, 16) ?></h5>
+                          <img class="img-fluid" src="<?= $topic['src_desktop']?>" alt="">
                           <div class="card-body p-5">
-                            <h2>Heading here</h2>
-                            <p>Lorem ipsum dolor sit amet. Ut placerat orci nulla pellentesque dignissim enim sit. Urna condimentum mattis pellentesque id. Ut enim blandit volutpat maecenas. A cras semper auctor neque vitae. Sed libero enim sed faucibus turpis in eu. Lacus vestibulum sed arcu non odio euismod lacinia. Eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada. Tellus id interdum velit laoreet. Nunc aliquet bibendum enim facilisis gravida neque convallis a cras. In iaculis nunc sed augue lacus viverra vitae congue eu. Proin sed libero enim sed faucibus turpis in eu mi. Ipsum dolor sit amet consectetur adipiscing elit. Diam donec adipiscing tristique risus nec feugiat in fermentum posuere. Nam aliquam sem et tortor consequat id porta nibh. Arcu odio ut sem nulla pharetra diam sit amet. Vitae congue eu consequat ac felis donec et odio. Sem nulla pharetra diam sit amet.</p>
-                            <h2>Another heading here</h2>
-                            <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut placerat orci nulla pellentesque dignissim enim sit. Urna condimentum mattis pellentesque id. Ut enim blandit volutpat maecenas. A cras semper auctor neque vitae. Sed libero enim sed faucibus turpis in eu. Lacus vestibulum sed arcu non odio euismod lacinia. Eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada. Tellus id interdum velit laoreet. Nunc aliquet bibendum enim facilisis gravida neque convallis a cras. In iaculis nunc sed augue lacus viverra vitae congue eu. Proin sed libero enim sed faucibus turpis in eu mi. Ipsum dolor sit amet consectetur adipiscing elit. Diam donec adipiscing tristique risus nec feugiat in fermentum posuere. Nam aliquam sem et tortor consequat id porta nibh. Sed vulputate mi sit amet mauris commodo quis imperdiet. In vitae turpis massa sed elementum. Arcu odio ut sem nulla pharetra diam sit amet. Vitae congue eu consequat ac felis donec et odio. Sem nulla pharetra diam sit amet.</p>
-                            <h2>Last heading here</h2>
-                            <p>Ut placerat orci nullaemper auctor neque vitae. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nam aliquam sem et tortor consequat id porta nibh. Sed vulputate mi sit amet mauris commodo quis imperdiet. In vitae turpis massa sed elementum. Arcu odio ut sem nulla pharetra diam sit amet. Vitae congue eu consequat ac felis donec et odio. Sem nulla pharetra diam sit amet.</p>
-                            <h2>Summary</h2>
-                            <p>Nam aliquam sem et tortor consequat id porta nibh. Sed vulputate mi sit amet mauris commodo quis imperdiet. In vitae turpis massa sed elementum. Arcu odio ut sem nulla pharetra diam sit amet. Vitae congue eu consequat ac felis donec et odio. Sem nulla pharetra diam sit amet.</p>
+                            <p><?= $topic['body']?></p>
                           </div>
                          
-                                                    <!-- TRIGGER QUIZ MODAL 1 -->
-                        <div class="card-footer d-flex align-items-center justify-content-center">
-                          <p class="mb-0 me-3 text-warning">
-                            You have not completed a quiz of this topic: 
-                          </p>
-                          <button type="button" class="btn btn-primary text-white align-end" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                            Take a quiz
-                          </button>
-                        </div>
-                       
+                          <!-- TRIGGER QUIZ MODAL 1 -->
+                          <div class="card-footer d-flex align-items-center justify-content-center">
+                            <p class="mb-0 me-3 text-warning">
+                              You have not completed a quiz of this topic: 
+                            </p>
+                            <button type="button" class="btn btn-primary text-white align-end" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                              Take a quiz
+                            </button>
+                          </div>
                         </div>
 
                     <!-- PRESOURCES -->
@@ -246,7 +247,7 @@
                                 Resources
                             </div>
                             <div class="card-body">
-                            <form action="" method="POST">
+                              <form action="" method="POST">
                                 <div class="mb-2">
                                   <h4>Post a resource</h4>
                                   <label for="resource_text">Got a resource worth sharing? Sharing is caring, post it in the box below!</label>
@@ -255,44 +256,30 @@
                                 </div>
                                 <button type="button" class="btn btn-primary mb-5">Share</button>
                               </form>
-
-                                <div class="card mb-4">
+                              <?php foreach($topic_resource as $single_resource){
+                                ?>
+                                    <div class="card mb-4">
                                   <div class="card-header text-success">
-                                    50 <i class="fas fa-grin-hearts me-1"></i>
+                                    <?= $single_resource['votes']?> <i class="fas fa-grin-hearts me-1"></i>
                                   </div>
                                   <div class="card-body row">                                   
                                     <div class="col-1">
                                       <img style="height: 50px; width: 50px; border-radius: 25px;" src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="USer image">
                                     </div>
                                     <div class="col-11">
-                                      <p class="text-muted mb-0">Date</p>
-                                      <p>Comment</p>
+                                      <h4><?= $single_resource['user_name']?> <?=$single_resource['user_last_name']?></h4>
+                                      <p class="text-muted mb-0"><?= substr($single_resource['creation_date'], 0, 16) ?></p>
+                                      <p class="mb-0"><?= $single_resource['body']?></p>
+                                      <a class="btn btn-link m-0 p-0 text-start" target="_blank" href="<?= $single_resource['link']?>"><?= $single_resource['link']?></a>
                                     </div>
                                   </div>
                                   <div class="card-footer">
                                     <button class="btn btn-sm btn-outline-warning text-center"><i class="fas fa-grin-hearts"></i></button>
-                                    <button class="btn btn-sm btn-outline-primary text-center disabled">Reply</button>
+                                    <button class=" btn btn-sm btn-outline-primary text-center disabled">Reply</button>
                                   </div>
                                 </div>
-
-                                <div class="card">
-                                  <div class="card-header text-success">
-                                    50 <i class="fas fa-grin-hearts me-1"></i>
-                                  </div>
-                                  <div class="card-body row">                                   
-                                    <div class="col-1">
-                                      <img style="height: 50px; width: 50px; border-radius: 25px;" src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="USer image">
-                                    </div>
-                                    <div class="col-11">
-                                      <p class="text-muted mb-0">Date</p>
-                                      <p>Comment</p>
-                                    </div>
-                                  </div>
-                                  <div class="card-footer">
-                                    <button class="btn btn-sm btn-outline-warning text-center"><i class="fas fa-grin-hearts"></i></button>
-                                    <button class="btn btn-sm btn-outline-primary text-center disabled">Reply</button>
-                                  </div>
-                                </div>
+                                <?php
+                            } ?>
                             </div>
                     </div>
                 </main>
@@ -302,6 +289,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
+ 
+
     </body>
 </html>

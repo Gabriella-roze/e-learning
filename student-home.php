@@ -13,73 +13,58 @@ try {
       $all_love_recieved += $resource['votes'];
       }
 
-  } catch(PDOException $ex) {
-  echo $ex->getMessage();
-  exit();
-  }
+    } catch(PDOException $ex) {
+    echo $ex->getMessage();
+    exit();
+    }
 
-// Get the resource that has most votes
-  // try {
-  //   $all_love_recieved = 0;
-  //   $q = $db->prepare('SELECT * FROM exam.resources ORDER BY votes DESC LIMIT 1;');
-  //     $q->execute();
-  //     $best_resource = $q->fetchAll()[0];
-
-  //     print_r($best_resource);
-  
-  //   } catch(PDOException $ex) {
-  //   echo $ex->getMessage();
-  //   exit();
-  //   }
-
-
-// Get topics from db
-try {
-$q = $db->prepare('SELECT * FROM exam.topic;');
-  $q->execute();
-  $topics = $q->fetchAll();
-  // print_r($topics);
-
-} catch(PDOException $ex) {
-echo $ex->getMessage();
-exit();
-}
-
-// Get user passed quizzes from db
-try {
-  $q = $db->prepare('SELECT count(*) FROM exam.user_topic_log WHERE user_id=1 AND quiz_passed=true;');
-    $q->execute();
-    $passed_topics_count = $q->fetchAll();
-  } catch(PDOException $ex) {
-  echo $ex->getMessage();
-  exit();
-  }
-
-  // Get best resource (resources are sorted by votes in db)
+  // Get topics from db
   try {
-  $q = $db->prepare('SELECT * FROM exam.resources_view LIMIT 1;');
-  $q->execute();
-  $best_resource = $q->fetchAll()[0];
-  print_r($best_resources);
+  $q = $db->prepare('SELECT * FROM exam.topic;');
+    $q->execute();
+    $topics = $q->fetchAll();
+    // print_r($topics);
 
-} catch(PDOException $ex) {
-echo $ex->getMessage();
-exit();
-}
+  } catch(PDOException $ex) {
+  echo $ex->getMessage();
+  exit();
+  }
 
-// Get top 3 topics ids and get those topics
-try {
-  $q = $db->prepare('SELECT COUNT(resource_id) AS resources, topic_id 
-  FROM exam.resources
-  GROUP BY topic_id
-  ORDER BY resources DESC LIMIT 3');
-  $q->execute();
-  $top_topics_ids = $q->fetchAll();
+  // Get user passed quizzes from db
+  try {
+    $q = $db->prepare('SELECT count(*) FROM exam.user_topic_log WHERE user_id=1 AND quiz_passed=true;');
+      $q->execute();
+      $passed_topics_count = $q->fetchAll();
+    } catch(PDOException $ex) {
+    echo $ex->getMessage();
+    exit();
+    }
 
-} catch(PDOException $ex) {
-echo $ex->getMessage();
-exit();
-}
+    // Get best resource (resources are sorted by votes in db)
+    try {
+    $q = $db->prepare('SELECT * FROM exam.resources_view LIMIT 1;');
+    $q->execute();
+    $best_resource = $q->fetchAll()[0];
+    print_r($best_resources);
+
+  } catch(PDOException $ex) {
+  echo $ex->getMessage();
+  exit();
+  }
+
+  // Get top 3 topics ids and get those topics
+  try {
+    $q = $db->prepare('SELECT COUNT(resource_id) AS resources, topic_id 
+    FROM exam.resources
+    GROUP BY topic_id
+    ORDER BY resources DESC LIMIT 3');
+    $q->execute();
+    $top_topics_ids = $q->fetchAll();
+
+  } catch(PDOException $ex) {
+  echo $ex->getMessage();
+  exit();
+  }
 
   // Get user topic log
   try {
@@ -90,8 +75,6 @@ exit();
   echo $ex->getMessage();
   exit();
   }
-
-
 
 
 ?>
@@ -132,7 +115,7 @@ exit();
                         <li><a class="dropdown-item" href="#">Settings</a></li>
                         <li><a class="dropdown-item" href="#">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                        <li><a class="dropdown-item" href="index.html">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -143,7 +126,7 @@ exit();
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Main</div>
-                            <a class="nav-link" href="student-home.html">
+                            <a class="nav-link" href="student-home.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
@@ -152,23 +135,23 @@ exit();
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Topic 1
                             </a>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="topic2.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Topic 2
                             </a>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="topic3.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Topic 3
                             </a>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="topic4.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Topic 4
                             </a>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="topic5.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Topic 5
                             </a>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="topic6.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Topic 6
                             </a>
@@ -315,31 +298,24 @@ exit();
                                 <i class="fas fa-pepper-hot me-1"></i>
                                 Top 3 most hot topics
                             </div>
-
                             <div class="card-body row justify-content-evenly">
-
                             <?php
                               foreach($top_topics_ids as $id){
                                 foreach($topics as $topic ){
                                   if ($topic['topic_id'] == $id['topic_id']) {
                                     ?>
-
                                       <div class="col-3 card text-center" >
                                       <img src="https://guides.wp-bullet.com/wp-content/uploads/2018/12/export-large-mysql-database-tables-wordpress.png" class="card-img-top" alt="...">
                                         <div class="card-body">
                                           <h5 class="card-title"><?=$topic['name']?></h5>
-                                          <a href="topic<?=$topic['topic_id']?>.html" class="btn btn-primary btn-sm">Visit topic</a>
+                                          <a href="topic<?=$topic['topic_id']?>.php" class="btn btn-primary btn-sm">Visit topic</a>
                                         </div>
                                       </div>
-
                                     <?php
                                   }
                                 }
                               }
-
                             ?>
-
-                    
                         </div>
                     </div>
 
@@ -356,7 +332,9 @@ exit();
                                   <h5 class="card-title"><?= $best_resource['user_name']?> <?= $best_resource['user_last_name']?></h5>
                                   <h6 class="card-subtitle mb-2 text-muted"><?= $best_resource['topic_name']?></h6>
                                   <p class="card-text mb-0"><?= $best_resource['body']?></p>
+                                  <div>
                                   <a class="btn btn-link text-start m-0 p-0 mb-3" href="<?= $best_resource['link']?>"><?= $best_resource['link']?></a>
+                                  </div>
                                   <a href="<?= "topic{$best_resource['topic_id']}.php"?>" class="btn btn-primary btn-sm">Visit topic</a>
                                 </div>
                               </div>
@@ -370,140 +348,36 @@ exit();
                                 Personal Progress
                             </div>
                             <div class="card-body">
-                              <!-- HERE -->
-
                               <?php
-                             
                                 foreach($topics_log as $topic ){
-                                    ?>
-                                    <div class="card mb-3" >
-                                      <div class="row col-auto g-0">
-                                        <div class="col-md-4" style="background: url(https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png)  no-repeat center center / cover;">
-                                        </div>
-                                        <div class="col-md-8">
-                                          <div class="card-body">
-                                            <h4 class="card-title"><?=$topic['name']?></h4>
-                                            <?php
-                                            if ($topic['quiz_passed']){
-                                              ?>
-
-                                              <div class="mb-3">
-                                                <span class="badge rounded-pill bg-info mb-2">Quiz completed</span>
-                                              </div>
-
-                                              <?php
-                                            }
-
-                                            
+                                  ?>
+                                  <div class="card mb-3" >
+                                    <div class="row col-auto g-0">
+                                      <div class="col-md-4" style="background: url(https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png)  no-repeat center center / cover;">
+                                      </div>
+                                      <div class="col-md-8">
+                                        <div class="card-body">
+                                          <h4 class="card-title"><?=$topic['name']?></h4>
+                                          <?php
+                                          if ($topic['quiz_passed']){
                                             ?>
-
-                                            <a href="topic<?=$topic['topic_id']?>.php" class="btn btn-primary btn-sm">Go to topic</a>
-                                          </div>
+                                            <div class="mb-3">
+                                              <span class="badge rounded-pill bg-info mb-2">Quiz completed</span>
+                                            </div>
+                                            <?php
+                                          }
+                                          ?>
+                                          <a href="topic<?=$topic['topic_id']?>.php" class="btn btn-primary btn-sm">Go to topic</a>
                                         </div>
                                       </div>
                                     </div>
-
-
-
-                                    <?php
-                                 
+                                  </div>
+                                  <?php
                                 }
                             ?>
-
-
-<!-- 
-                              
-                              <div class="card mb-3" >
-                                <div class="row col-auto g-0">
-                                  <div class="col-md-4" style="background: url(https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png)  no-repeat center center / cover;">
-                                  </div>
-                                  <div class="col-md-8">
-                                    <div class="card-body">
-                                      <h4 class="card-title">Topic 1: Name of the topic</h4>
-                                      <span class="badge rounded-pill bg-info mb-2">Quiz completed</span>
-                                      <p class="card-text"><small class="text-muted">Last resource uploaded: 3 mins ago</small></p>
-                                      <a href="topic1.php" class="btn btn-primary btn-sm">Go to topic</a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="card mb-3" >
-                                <div class="row col-auto g-0">
-                                  <div class="col-md-4" style="background: url(https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png)  no-repeat center center / cover;">
-                                  </div>
-                                  <div class="col-md-8">
-                                    <div class="card-body">
-                                      <h4 class="card-title">Topic 2: Name of the topic</h4>
-                                      <span class="badge rounded-pill bg-info mb-2">Quiz completed</span>
-                                      <p class="card-text"><small class="text-muted">Last resource uploaded: 3 mins ago</small></p>
-                                      <a href="tolic2.html" class="btn btn-primary btn-sm">Go to topic</a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="card mb-3" >
-                                <div class="row col-auto g-0">
-                                  <div class="col-md-4" style="background: url(https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png)  no-repeat center center / cover;">
-                                  </div>
-                                  <div class="col-md-8">
-                                    <div class="card-body">
-                                      <h4 class="card-title">Topic 3: Name of the topic</h4>
-                                      <span class="badge rounded-pill bg-info mb-2">Quiz completed</span>
-                                      <p class="card-text"><small class="text-muted">Last resource uploaded: 3 mins ago</small></p>
-                                      <a href="topic3.html" class="btn btn-primary btn-sm">Go to topic</a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="card mb-3" >
-                                <div class="row col-auto g-0">
-                                  <div class="col-md-4" style="background: url(https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png)  no-repeat center center / cover;">
-                                  </div>
-                                  <div class="col-md-8">
-                                    <div class="card-body">
-                                      <h4 class="card-title">Topic 4: Name of the topic</h4>
-                                      <span class="badge rounded-pill bg-info mb-2">Quiz completed</span>
-                                      <p class="card-text"><small class="text-muted">Last resource uploaded: 3 mins ago</small></p>
-                                      <a href="topic4.html" class="btn btn-primary btn-sm">Go to topic</a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="card mb-3" >
-                                <div class="row col-auto g-0">
-                                  <div class="col-md-4" style="background: url(https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png)  no-repeat center center / cover;">
-                                  </div>
-                                  <div class="col-md-8">
-                                    <div class="card-body">
-                                      <h4 class="card-title">Topic 5: Name of the topic</h4>
-                                      <p class="card-text"><small class="text-muted">Last resource uploaded: 3 mins ago</small></p>
-                                      <a href="topic5.html" class="btn btn-primary btn-sm">Go to topic</a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="card mb-3" >
-                                <div class="row col-auto g-0">
-                                  <div class="col-md-4" style="background: url(https://download.pingcap.com/images/blog/choosing-right-database-for-your-applications.png)  no-repeat center center / cover;">
-                                  </div>
-                                  <div class="col-md-8">
-                                    <div class="card-body">
-                                      <h4 class="card-title">Topic 6: Name of the topic</h4>
-                                      <p class="card-text"><small class="text-muted">Last resource uploaded: 3 mins ago</small></p>
-                                      <a href="topic6.html" class="btn btn-primary btn-sm">Go to topic</a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div> -->
                         </div>
                     </div>
                 </main>
- 
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
