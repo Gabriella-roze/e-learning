@@ -33,27 +33,27 @@
   }
 
 // Get quizz data
-// $key = 'Topic1';
-// try {
-//     $redis = new Redis();
-//     $redis->connect('127.0.0.1', 6379);
+$key = 'Topic1';
+try {
+    $redis = new Redis();
+    $redis->connect('127.0.0.1', 6379);
 
-//     if (!$redis->get($key)) {
-//       $q = $db->prepare('SELECT * FROM exam.quiz(3,1)');
-//       $q->execute();
-//       $quiz = $q->fetchAll();
-//         $redis->set($key, serialize($quiz));
-//         $redis->expire($key, 10);
-//         // $source = 'Postgresql Server';
-//     } else {
-//         //  $source = 'Redis Server';
-//          $quiz = unserialize($redis->get($key));
-//     }
-//     // echo $source . ': <br>';
+    if (!$redis->get($key)) {
+      $q = $db->prepare('SELECT * FROM exam.quiz(3,1)');
+      $q->execute();
+      $quiz = $q->fetchAll();
+        $redis->set($key, serialize($quiz));
+        $redis->expire($key, 10);
+        $source = 'Postgresql Server';
+    } else {
+         $source = 'Redis Server';
+         $quiz = unserialize($redis->get($key));
+    }
+    echo $source . ': <br>';
     
-// } catch (Exception $ex) {
-//     echo $ex->getMessage();
-// }
+} catch (Exception $ex) {
+    echo $ex->getMessage();
+}
 ?>
 
 <!DOCTYPE html>
